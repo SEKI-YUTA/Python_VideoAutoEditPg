@@ -1,8 +1,12 @@
 import os
+from traceback import print_tb
 from cv2 import imshow, imwrite
 from matplotlib.pyplot import text
 import numpy as np
 import cv2 as cv
+import imgDiff
+import detectColor
+
 
 def main():
     imageCount = 0
@@ -32,16 +36,34 @@ def main():
         gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         # Display the resulting frame
         # cv.imshow('frame', gray)
-        if(frameCount > videoFPS * 20):
+        
+        # 20秒ごとに写真を保存するかどうかを判定する
+        if(frameCount > videoFPS * 10):
             imageArr = np.asarray(frame)
-            # パスの区切りに//を使わないとエラーが出るものがあったがこれは/でも大丈夫みたい
-            cv.imwrite(saveDir + "exportedImage" + str(imageCount) + ".png", imageArr)
-            print("saveing image at " + saveDir + "exportedImage" + str(imageCount) + ".png")
-            imageCount = imageCount + 1
+            if imageCount == 0:
+                print("first image")
+                # パスの区切りに//を使わないとエラーが出るものがあったがこれは/でも大丈夫みたい
+                cv.imwrite(saveDir + "exportedImage" + str(imageCount) + ".png", imageArr)
+                print("saveing image at " + saveDir + "exportedImage" + str(imageCount) + ".png")
+                imageCount = imageCount + 1
+            else:
+                print("second image")
+                baseImg = cv.imread(saveDir + "exportedImage" + str(imageCount - 1) + ".png", cv.IMREAD_COLOR)
+                print(saveDir + "exportedImage" + str(imageCount) + ".png")
+                # diffImg = imgDiff.getDiffImg(baseImg, baseImg)
+                imgDiff.writeDiffImg(baseImg, frame)
+                diffImg = cv.imread("./diff_image.png")
+                if type(diffImg) == None:
+                    print("diffImg is None")
+                value = detectColor.detectValue(diffImg)
+                print("value: {}".format(value))
+                if value > 40:
+                    cv.imwrite(saveDir + "exportedImage" + str(imageCount) + ".png", imageArr)
+                    imageCount = imageCount + 1
             frameCount = 0
         else:
             frameCount = frameCount + 1
-            print("frameCount: " + str(frameCount))
+            # print("frameCount: " + str(frameCount))
         putFPSText(frame=frame, text="FPS" + str(videoFPS))
         imshow("frame", frame )
         if cv.waitKey(1) == ord('q'):

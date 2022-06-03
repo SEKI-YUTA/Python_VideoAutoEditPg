@@ -63,9 +63,9 @@ import numpy as np
 # print("画像が一致しています" if np.array_equal(img1, img2) else "画像が一致しません")
 # 画像を完全一致か判定するプログラムここまで
 
-# 2枚の画像の差分画像を書き出すプログラム
+# # 2枚の画像の差分画像を書き出すプログラム
 # img1 = cv.imread("./assets/assetImg1.png")
-# img2 = cv.imread("./assets/assetImg2.png")
+# img2 = cv.imread("./assets/assetImg1.png")
 
 # if img1.shape == img2.shape:
 #     img_diff = img1.astype(int) - img2.astype(int)
@@ -77,14 +77,25 @@ import numpy as np
 #     print("最小値" + str(img_diff_abs.min()))
 #     # print(type(img_diff_abs_grey))
 #     cv.imwrite("diff_image.png", img_diff_abs)
-    # cv.imshow("diff_image", img_diff_abs)
-# 2枚の画像の差分画像を書き出すプログラムここまで
+#     # cv.imshow("diff_image", img_diff_abs)
+# # 2枚の画像の差分画像を書き出すプログラムここまで
 
 
 # 画像の色を判定するプログラム
-img = cv.imread("assets/assetImg3.png")
-b = img.T[0].flatten().mean()
-print(b)
+# img = cv.imread("./diff_image.png")
+# imgHSV = cv.cvtColor(img, cv.COLOR_BGR2HSV)
+# h = img.T[0].flatten().mean()
+# s = img.T[1].flatten().mean()
+# v = img.T[2].flatten().mean()
+# print(h)
+# print(s)
+# print(v)
 # https://qiita.com/Zumwalt/items/4d9bc15608483fa77476
 # print(img)
 # 画像の色を判定するプログラムここまで
+
+
+img = cv.imread("C:\\Users\\yuta\\Desktop\\autoEditpg\\exported\\exportedImage0.png")
+cv.imshow("image", img)
+cv.waitKey(0)
+cv.destroyAllWindows()
